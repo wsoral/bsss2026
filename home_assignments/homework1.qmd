@@ -1,0 +1,38 @@
+---
+title: "Homework 1"
+format: html
+---
+
+## Homework 1 
+
+### Bayesian thinking in your own research workflow
+
+Select **one empirical dataset or research question that you have personally worked on** during the last 12 months (course project, thesis, job-related analysis, or independent research).
+
+In your answer:
+
+1. Provide a short description (3–4 sentences) of:
+
+   * the substantive research question,
+   * the type of data used,
+   * and the statistical method originally applied (or planned).
+
+2. Identify **one specific model decision** you made (or would need to make), such as:
+
+   * handling missing data,
+   * hierarchical structure,
+   * small sample size,
+   * measurement uncertainty,
+   * or prior theoretical expectations.
+
+3. Explain how a Bayesian approach would change this decision. Your answer must include:
+
+   * one concrete prior you would consider using (describe it conceptually — no formulas required),
+   * one practical advantage related to interpretation or inference.
+
+4. Finally, describe **two realistic constraints** (institutional, computational, communicational, or disciplinary) that might discourage researchers in your field from adopting Bayesian methods.
+
+Your answer should clearly connect methodological reasoning with the context of your own research area.
+
+
+
