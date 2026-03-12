@@ -15,6 +15,7 @@ output:
 class: inverse, center, middle
 ```{r warning=FALSE, message=FALSE, echo=FALSE}
 library(tidyverse)
+
 theme_set(ggpubr::theme_pubr())
 data = readRDS("class1_example2_df.rds")
 library(lme4)

@@ -170,7 +170,13 @@ class: inverse, middle, center
 # Beta-Binomial model
 
 ---
+## Posterior
 
+$$
+Posterior \approx Likelihood \times Prior
+$$
+
+---
 ## Binomial distribution - likelihood
 
 $$
@@ -193,7 +199,7 @@ prob_nk = dbinom(k_success, n_trials, p_grid)
 tibble(p_grid, prob_nk) %>% 
 ggplot(aes(p_grid, prob_nk))+
   geom_line()+
-  labs(title = "Likelihood given 13 successes across 20 trials",
+  labs(title = "Likelihood of 13 successes across 20 trials",
        y = "Likelihood", x = "Probability in a single trial")
 ```
 
