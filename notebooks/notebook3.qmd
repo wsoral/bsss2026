@@ -1,0 +1,285 @@
+---
+title: "Normal models (with brms)"
+format: html
+---
+
+# Data
+
+As a case study, we will use (simulated) experimental data on the effects of alcohol on reaction times in a cognitive task. Forty adults were tested 20 minutes before and 20 minutes after consuming a drink. Participants were randomly assigned to one of two conditions:
+
+- 20 participants consumed 250 ml of a 15% alcoholic beverage.
+- 20 participants consumed 250 ml of a non-alcoholic beverage.
+
+Researchers ensured that the drinks smelled and tasted the same and were served at the same temperature.
+
+Let’s begin by loading the data.
+
+```{r}
+library(tidyverse)
+theme_set(theme_classic())
+alcoholRT <- read_rds("data_files/alcoholRT.rds")
+alcoholRT
+```
+
+`group`: The condition to which a participant was assigned — either placebo or alcohol.
+`react_time`: The difference between post-test and pre-test reaction times (in seconds). Higher values indicate worse performance in the post-test relative to the pre-test.
+
+# Univariate Normal model
+
+In the first part, we focus on the change in reaction time (RT) across the entire sample.
+
+```{r}
+alcoholRT %>%
+  ggplot(aes(x="total sample", y=react_time)) +
+  geom_violin(fill = "lightyellow") +
+  geom_boxplot(fill = "lightyellow")
+```
+
+The distribution of scores appears symmetric and approximately Normal.
+
+## Setting the prior
+
+What do we know about the effects of alcohol on reaction time?
+
+Most studies suggest that alcohol slows reaction times, but the magnitude of this effect depends on task complexity, duration, and other factors.
+
+Try to set prior_mean to a reasonable value. Then set prior_sd to reflect your uncertainty about the effect of alcohol on performance. Do not confuse this value with the standard deviation of individual scores.
+
+Plot the prior to check whether it aligns with your prior knowledge about alcohol’s effect on RT.
+
+```{r}
+# Set the values below
+prior_mean
+prior_sd
+
+p_grid = seq(prior_mean - 3 * prior_sd, prior_mean + 3 * prior_sd, length.out = 100)
+prior = dnorm(p_grid, mean = prior_mean, sd = prior_sd)
+
+tibble(p_grid, prior) %>%
+  ggplot(aes(p_grid, prior)) +
+  geom_line() +
+  labs(x = "Increase in RT (in s.) after alcohol intake", y = "Prior")
+```
+
+## Computing posterior
+
+Before computing the posterior, we need to obtain:
+
+- n: the number of observations
+- $\bar{x}$: the sample mean
+- $\sigma_0^2$: the population variance
+
+We assume perfect knowledge of the population variance (i.e., how much individuals differ in their susceptibility to alcohol). Do not confuse this with the prior SD/variance. In practice, we would not know the true variance, but for simplicity, assume that the sample variance/SD is a perfect estimate.
+
+```{r}
+# Insert formulas to obtain required data.
+n_cases = nrow(alcoholRT)
+sample_mean = mean(alcoholRT$react_time)
+known_sd = sd(alcoholRT$react_time)
+```
+
+To compute the posterior mean and variance for a model with known variance, use the formulas below:
+
+$$
+\hat{\mu} = \frac{\frac{m}{s^2} + \frac{n\bar{x}}{\sigma_0^2}}{\frac{1}{s^2} + \frac{n}{\sigma_0^2}}
+$$
+
+
+
+$$
+\hat{\sigma}_\mu^2 = \left( \frac{1}{s^2} + \frac{n}{\sigma_0^2} \right)^{-1}
+$$
+
+
+
+Using these formulas, compute the posterior mean, variance, and standard deviation.
+
+```{r}
+# Set correct formulas.
+posterior_mean
+posterior_var
+posterior_sd
+```
+
+Next, we visualize the results.
+
+```{r}
+posterior = dnorm(p_grid, posterior_mean, posterior_sd)
+sample_df = tibble(x = sample_mean, y = dnorm(sample_mean, posterior_mean, posterior_sd))
+
+tibble(p_grid, prior, posterior) %>%
+  ggplot(aes(p_grid)) +
+  geom_line(aes(y = prior, linetype = "prior")) +
+  geom_line(aes(y = posterior, linetype = "posterior")) +
+  geom_point(aes(x, y), data = sample_df, size = 3, colour = "red")
+```
+
+We summarize the results using the posterior median and the 95% credible interval.
+
+```{r}
+median_ci95 = c(0.025, 0.5, 0.975)
+qnorm(median_ci95, posterior_mean, posterior_sd)
+```
+
+We also compute the Savage–Dickey ratio to quantify the change in evidence after observing the data.
+
+```{r}
+test_value
+dnorm(test_value, posterior_mean, posterior_sd) / dnorm(test_value, prior_mean, prior_sd)
+```
+
+# Univariate Normal Model with brms
+
+First, let’s see how the alcohol example can be implemented using `brms`.
+
+```{r}
+library(brms)
+```
+
+Below, we specify the prior in `brms` syntax:
+
+```{r}
+# You may want to change these values before moving on.
+prior_mean
+prior_sd
+prior_text = paste0("normal(", prior_mean, ", ", prior_sd, ")")
+prior_text
+```
+
+We use `set_prior` to define the prior for the mean change in reaction time (RT) after alcohol consumption. We must specify both the parameter class and the coefficient name to which the prior applies.
+
+We then use `validate_prior` to check whether the prior has been correctly specified.
+
+```{r}
+priors = c(
+  set_prior(prior_text, class = "b", coef = "Intercept")
+)
+
+validate_prior(
+  prior = priors,
+  formula = react_time ~ 0 + Intercept,
+  data = alcoholRT
+)
+```
+
+Note that in this model we also need a prior for the population standard deviation (SD), which represents how much individuals differ in their susceptibility to alcohol. We do not assume that this value is known; instead, we estimate its posterior distribution from the data. Setting informative priors for variance or SD parameters is often difficult, so `brms` provides a default weakly informative prior.
+
+Below, we visualize this prior for $\sigma$.
+
+```{r}
+tibble(
+  sigma_grid = seq(0, 8, length= 100),
+  sigma_prior = dstudent_t(sigma_grid, df = 3,  mu = 0, sigma = 2.5)
+) %>% 
+  ggplot(aes(sigma_grid, sigma_prior))+
+  geom_line()+
+  labs(x = expression("Values of "~sigma), y = "Prior")
+```
+
+
+Next, we fit the model using `brm`. The formula `react_time ~ 0 + Intercept` indicates that reaction time is the outcome variable, and we are modeling its overall mean across the entire sample. The `0 + Intercept` notation tells brms that there are no predictors — we are only estimating the intercept.
+
+```{r}
+fit_normal <- brm(
+  formula = react_time ~ 0 + Intercept,
+  data = alcoholRT,
+  prior = priors,
+  sample_prior = "yes"
+)
+```
+
+We can inspect the results with:
+
+```{r}
+fit_normal
+```
+
+To compute the Savage–Dickey ratio, we use the `hypothesis` function:
+
+```{r}
+hypothesis(fit_normal, "Intercept = 0")
+```
+
+We can also visualize the result:
+
+```{r}
+hypothesis(fit_normal, "Intercept = 0") %>%
+  plot()
+```
+
+Compare these results with the analytic solution.
+
+
+# Two-Group Normal Model with brms
+
+Start by specifying priors for the change in reaction time (RT) in the alcohol and placebo groups.
+
+```{r}
+# You may want to change these values before moving on.
+prior_mean_alcohol
+prior_sd_alcohol
+
+prior_mean_placebo
+prior_sd_placebo
+
+prior_text_alcohol = paste0("normal(", prior_mean_alcohol, ", ", prior_sd_alcohol, ")")
+prior_text_placebo = paste0("normal(", prior_mean_placebo, ", ", prior_sd_placebo, ")")
+prior_text_alcohol
+prior_text_placebo
+```
+
+Set priors for both groups:
+
+```{r}
+priors = c(
+  set_prior(prior_text_alcohol, class = "b", coef = "groupalcohol"),
+  set_prior(prior_text_placebo, class = "b", coef = "groupplacebo")
+)
+
+validate_prior(
+  prior = priors,
+  formula = react_time ~ 0 + group,
+  data = alcoholRT
+)
+```
+
+Fit the model. 
+The formula `react_time ~ 0 + group` specifies that the outcome (`react_time`) is predicted by a categorical variable (`group`). The `0 + group` notation ensures that we estimate separate means for both conditions. Without `0 +`, `brms` would estimate one group mean and the difference between groups.
+
+```{r}
+fit_normal_two_group <- brm(  
+  formula = react_time ~ 0 + group,
+  data = alcoholRT,
+  prior = priors,
+  sample_prior = "yes"
+)
+```
+
+Inspect the results:
+
+```{r}
+fit_normal_two_group
+```
+
+To compare group means, we can use the `hypothesis` function:
+
+```{r}
+hypothesis(fit_normal_two_group, "groupalcohol - groupplacebo = 0")
+```
+
+We can also visualize the posterior distribution of the difference:
+
+```{r}
+hypothesis(fit_normal_two_group, "groupalcohol - groupplacebo = 0") %>% 
+  plot()
+```
+
+Finally, compare these results with a frequentist approach:
+
+```{r}
+t.test(react_time ~ group, data = alcoholRT, var.equal=T)
+```
+
+
+
+

@@ -17,7 +17,7 @@ class: center, middle, inverse, title-slide
 # Bayesian Statistics in Social Sciences
 ]
 .subtitle[
-## Class 2 - simple models and priors
+## Class 3 - using <em>brms</em> for simple models
 ]
 .author[
 ### Wiktor Soral
@@ -28,255 +28,175 @@ class: center, middle, inverse, title-slide
 
 ---
 
-class: inverse, middle, center
 
 
-# Bayesian updating
 
----
+background-image: url("figures/football.webp")
+background-position: 50% 80%
+background-size: 60% 60%
 
-## Vampire detector problem
+## Summing random variables
 
--   Suppose you have build a perfect detector of vampires.
--   You start examining randomly encountered people.
--   You have obtained a sample of 10 independent records.
--   Vampire, Human, Human, Vampire, Human, Human, Human, Human, Human, Human
+-   Suppose you and a thousand of your closest friends line up on the halfway line of a football field.
 
 ---
 
-## Bayesian updating
-
-&lt;img src="class2_files/figure-html/unnamed-chunk-2-1.png" alt="" width="70%" style="display: block; margin: auto;" /&gt;
-
----
-
-## Bayesian updating
-
-&lt;img src="class2_files/figure-html/unnamed-chunk-3-1.png" alt="" width="70%" style="display: block; margin: auto;" /&gt;
+## Summing random variables
 
 
----
-## Bayesian updating
-
-&lt;img src="class2_files/figure-html/unnamed-chunk-4-1.png" alt="" width="70%" style="display: block; margin: auto;" /&gt;
-
-
----
-## Bayesian updating
-
-&lt;img src="class2_files/figure-html/unnamed-chunk-5-1.png" alt="" width="70%" style="display: block; margin: auto;" /&gt;
-
-
----
-## Bayesian updating
-
-&lt;img src="class2_files/figure-html/unnamed-chunk-6-1.png" alt="" width="70%" style="display: block; margin: auto;" /&gt;
-
-
----
-## Bayesian updating
-
-&lt;img src="class2_files/figure-html/unnamed-chunk-7-1.png" alt="" width="70%" style="display: block; margin: auto;" /&gt;
-
----
-## Bayesian updating
-
-&lt;img src="class2_files/figure-html/unnamed-chunk-8-1.png" alt="" width="70%" style="display: block; margin: auto;" /&gt;
-
----
-## Bayesian updating
-
-&lt;img src="class2_files/figure-html/unnamed-chunk-9-1.png" alt="" width="70%" style="display: block; margin: auto;" /&gt;
-
-
----
-## Bayesian updating
-
-&lt;img src="class2_files/figure-html/unnamed-chunk-10-1.png" alt="" width="70%" style="display: block; margin: auto;" /&gt;
-
----
-## Bayesian updating
-
-&lt;img src="class2_files/figure-html/unnamed-chunk-11-1.png" alt="" width="70%" style="display: block; margin: auto;" /&gt;
-
----
-class: inverse, middle, center
-# Beta-Binomial model
-
----
-## Posterior
-
-$$
-Posterior \approx Likelihood \times Prior
-$$
-
----
-## Binomial distribution - likelihood
-
-$$
-\mathcal{B}(n, p) = \binom{n}{k}p^y(1 - p)^{n - k}
-$$
-
-- `\(n\)` - number of trials
-- `\(k\)` - number of successes
-- `\(p\)` - probability in each trial
-
----
-## Binomial distribution - likelihood
-
-&lt;img src="class2_files/figure-html/unnamed-chunk-12-1.png" alt="" width="70%" style="display: block; margin: auto;" /&gt;
-
----
-## Beta distribution - prior
-
-$$
-\mathcal{Beta}(\alpha, \beta) = \frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha)\Gamma(\beta)}p^{\alpha-1}(1 - p)^{\beta - 1}
-$$
-
-- `\(\alpha &gt; 0\)` - shape parameter 1
-- `\(\beta &gt; 0\)` - shape parameter 2
-- `\(p\)` - probability in each trial
-
-
----
-## Beta distribution - prior
-
-&lt;img src="class2_files/figure-html/unnamed-chunk-13-1.png" alt="" width="70%" style="display: block; margin: auto;" /&gt;
-
----
-## Posterior
-
-$$
-Posterior \approx Likelihood \times Prior
-$$
-
----
-## Posterior
-
-$$
-Posterior \approx \mathcal{B}(n,\ p) \times \mathcal{Beta}(\alpha,\ \beta)
-$$
-
----
-## Posterior
-
-$$
-Posterior\\ \approx \left[\binom{n}{k}p^y(1 - p)^{n - k}\right] \times \left[\frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha)\Gamma(\beta)}p^{\alpha-1}(1 - p)^{\beta - 1}\right]
-$$
-
----
-## Posterior
-
-$$
-Posterior = \frac{Likelihood \times Prior}{Marginal\ Likelihood}
-$$
-
----
-
-## Posterior
-
-$$
-P(\theta | \mathcal{D}) = \frac{P(\mathcal{D} | \theta)\times P(\mathcal{D} | \theta)}{\int{P(\mathcal{D} | \theta)\times P(\mathcal{D} | \theta)}d\theta}
-$$
-
-- We need to use integral in the denominator part, because we want posterior to behave like a probability function, which should sum to 1.
-
----
-## Posterior
-
-$$
-Marginal\ Likelihood = 
-$$
---
-
-$$
-\int\left[\binom{n}{k}p^y(1 - p)^{n - k}\right] \times \left[\frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha)\Gamma(\beta)}p^{\alpha-1}(1 - p)^{\beta - 1}\right]dp = 
-$$
---
-
-$$
-some\ constant\ value
-$$
-
-
-- Because Beta distribution is a **conjugate prior** with respect to the Binomial distribution, we can find closed-form solution to this integral.
-
-
----
-## Beta distribution - posterior
-
-$$
-Posterior =  
-$$
---
-
-$$
-\frac{\Gamma(n + \alpha + \beta)}{\Gamma(k + \alpha)\Gamma(n - k + \beta)}p^{(k + \alpha)-1}(1 - p)^{(n - k + \beta) - 1} = 
-$$
+-   Each of you has a coin in your hand.
 
 --
 
-$$
-\mathcal{Beta}(k + \alpha,\ n - k + \beta)
-$$
+-   At the sound of the whistle, you begin flipping the coins.
+
+--
+
+-   Each time a coin comes up heads, that person moves one step towards the left-hand goal.
+
+--
+
+-   Each time a coin comes up tails, that person moves one step towards the right-hand goal.
+
+--
+
+-   Each person flips the coin 16 times, follows the implied moves, and then stands still.
+
+--
+
+-   Now we measure the distance of each person from the halfway line.
+
 
 ---
-## Beta distribution - posterior
+background-image: url("figures/football.webp")
+background-position: 50% 80%
+background-size: 60% 60%
 
-&lt;img src="class2_files/figure-html/unnamed-chunk-14-1.png" alt="" width="70%" style="display: block; margin: auto;" /&gt;
+## Summing random variables
 
+-   Can you predict what proportion of the thousand people who are standing on the halfway line?
+
+
+
+---
+
+## Summing random variables
+
+&lt;img src="class3_files/figure-html/unnamed-chunk-1-1.png" alt="" width="70%" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+## Summing random variables
+
+&lt;img src="class3_files/figure-html/unnamed-chunk-2-1.png" alt="" width="70%" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+## Why be Normal?
+
+-   A lot of phenomena results from summing of random variables. Thus, although their distribution will not be perfectly Gaussian, it will tend to like like Normal distribution.
+-   When all we know, or we are willing to know, about the distribution of variable is its mean and variance, Normal is the least surprising and least informative distribution we can choose. It is the most natural expression of our ignorance.
+-   See McElreath (2015)
 
 ---
 class: inverse, center, middle
-# Bayes factor
+
+## Normal-Normal model
 
 ---
-## Savage-Dickey density ratio
 
-&lt;img src="class2_files/figure-html/unnamed-chunk-15-1.png" alt="" width="70%" style="display: block; margin: auto;" /&gt;
+## Normal-Normal model
+
+X is distributed as Normal 
+$$
+X|\mu,\ \sigma_0^2 \sim \mathcal{N}(\mu, \sigma_0^2)
+$$
+
+$$
+= (2\pi\sigma_0^2)^{-\frac{1}{2}}\mathrm{exp} \left[-\frac{1}{2\sigma_0^2}(X - \mu)^2\right]
+$$
+
+Where 
+
+$$
+-\infty &lt; \mu &lt; \infty, \sigma_0^2\ \mathrm{known}
+$$
+
 
 ---
-## Savage-Dickey density ratio
+## Normal-Normal model
 
-- If we define the null hypothesis `\(H_0 = 0.5\)` and alternative hypothesis as `\(H_1 \neq 0.5\)`
-- Savage-Dickey density ratio will be approximate to the Bayes factor `\(BF_{01}\)` in support of the null
-- It will inform us how much we should update our belief in one hypothesis after observing the data.
+`\(\mu\)` is given a Normal prior
+
+$$
+\mu|m,\ s^2 \sim \mathcal{N}(m, s^2)
+$$
+
+
+$$
+= (2\pi s^2)^{-\frac{1}{2}}\mathrm{exp} \left[-\frac{1}{2s^2}(\mu - m)^2\right]
+$$
+
+
+$$
+m,\ s^2 \mathrm{known}
+$$
+
+
+---
+
+## Normal-Normal model
+
+$$
+\pi(\mu|\mathbf{x}) \propto p(\mathbf{x}|\mu)p(\mu)
+$$
+
+$$
+\propto \prod_{i=1}^n\mathrm{exp} \left[-\frac{1}{2\sigma_0^2}(X - \mu)^2\right]\mathrm{exp} \left[-\frac{1}{2s^2}(\mu - m)^2\right]
+$$
+
+$$
+\propto \left[-\frac{1}{2}\left(\frac{1}{s^2} + \frac{n}{\sigma_0^2}\right)\left(\mu - \frac{\left(\frac{m}{s^2} + \frac{n\bar{x}}{\sigma_0^2}\right)}{\left(\frac{1}{s^2} + \frac{n}{\sigma_0^2}\right)}\right)\right]
+$$
+
+---
+
+## Normal-Normal model
+
+Posterior mean is
+
+$$
+\hat{\mu} = \left. \left(\frac{m}{s^2} + \frac{n\bar{x}}{\sigma_0^2}\right) \middle/ \left(\frac{1}{s^2} + \frac{n}{\sigma_0^2}\right) \right.
+$$
+
+and variance of posterior for mean is:
+
+$$
+\hat{\sigma}_\mu^2 = \left(\frac{1}{s^2} + \frac{n}{\sigma_0^2}\right)^{-1}
+$$
 
 ---
 class: inverse, center, middle
-# Types of prior
 
-
----
-## Strength of prior evidence
-
-- uninformative prior
-- weakly informative prior
-- informative prior
+## Switching to numerical approach
 
 ---
-## Uninformative prior
 
-&lt;img src="class2_files/figure-html/unnamed-chunk-16-1.png" alt="" width="70%" style="display: block; margin: auto;" /&gt;
+## Switching to numerical approach
 
----
-## Weakly informative prior
-
-&lt;img src="class2_files/figure-html/unnamed-chunk-17-1.png" alt="" width="70%" style="display: block; margin: auto;" /&gt;
+-   With increasing model complexity, we may find that the analytic approach (using mathematical formulas) becomes impractical.
+    -   You might want to use priors and likelihoods other than the Normal distribution.
+    -   You might want to use multivariate or multiparameter models.
 
 ---
-## Informative prior
 
-&lt;img src="class2_files/figure-html/unnamed-chunk-18-1.png" alt="" width="70%" style="display: block; margin: auto;" /&gt;
+## Switching to numerical approach
 
----
-## Informative priors - sources of information
+-   Therefore, we will switch to a numerical approach that relies on mathematical simulations. These simulations allow us to find the posterior distribution without needing to solve complex integrals.
 
-- previous studies, published work
-- researcher intuition
-- interviewing substantive experts
-- convenience through conjugacy
-- nonparametrics oand other data derived sources
+-   The most commonly used approach in Bayesian analysis is Markov chain Monte Carlo (MCMC). You will learn more about it in our next class.
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
