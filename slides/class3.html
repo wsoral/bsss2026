@@ -4,7 +4,7 @@
     <title>Bayesian Statistics in Social Sciences</title>
     <meta charset="utf-8" />
     <meta name="author" content="Wiktor Soral" />
-    <meta name="date" content="2026-03-18" />
+    <meta name="date" content="2026-03-19" />
     <script src="libs/header-attrs-2.30/header-attrs.js"></script>
     <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link href="libs/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
@@ -23,7 +23,7 @@ class: center, middle, inverse, title-slide
 ### Wiktor Soral
 ]
 .date[
-### 2026-03-18
+### 2026-03-19
 ]
 
 ---
@@ -37,34 +37,34 @@ background-size: 60% 60%
 
 ## Summing random variables
 
--   Suppose you and a thousand of your closest friends line up on the halfway line of a football field.
+- Suppose you and a thousand of your closest friends line up along the halfway line of a football field.
 
 ---
 
 ## Summing random variables
 
 
--   Each of you has a coin in your hand.
+- Each of you has a coin in hand.
 
 --
 
--   At the sound of the whistle, you begin flipping the coins.
+- At the sound of the whistle, you begin flipping your coins.
 
 --
 
--   Each time a coin comes up heads, that person moves one step towards the left-hand goal.
+- Each time a coin lands heads, that person takes one step toward the left-hand goal.
 
 --
 
--   Each time a coin comes up tails, that person moves one step towards the right-hand goal.
+- Each time a coin lands tails, that person takes one step toward the right-hand goal.
 
 --
 
--   Each person flips the coin 16 times, follows the implied moves, and then stands still.
+- Each person flips the coin 16 times, follows the resulting movements, and then stops.
 
 --
 
--   Now we measure the distance of each person from the halfway line.
+- We then measure each person’s distance from the halfway line.
 
 
 ---
@@ -74,8 +74,7 @@ background-size: 60% 60%
 
 ## Summing random variables
 
--   Can you predict what proportion of the thousand people who are standing on the halfway line?
-
+- Can you predict what proportion of the thousand people will end up standing exactly on the halfway line?
 
 
 ---
@@ -96,9 +95,13 @@ background-size: 60% 60%
 
 ## Why be Normal?
 
--   A lot of phenomena results from summing of random variables. Thus, although their distribution will not be perfectly Gaussian, it will tend to like like Normal distribution.
--   When all we know, or we are willing to know, about the distribution of variable is its mean and variance, Normal is the least surprising and least informative distribution we can choose. It is the most natural expression of our ignorance.
--   See McElreath (2015)
+- Many phenomena arise as the sum of random variables. As a result, even if their distributions are not perfectly Gaussian, they tend to resemble a Normal distribution.
+
+- When all we know—or choose to model—about a variable’s distribution is its mean and variance, the Normal distribution is the least informative and least surprising choice. 
+
+- It is a natural expression of our uncertainty.
+
+- See McElreath (2015)
 
 ---
 class: inverse, center, middle
@@ -109,7 +112,8 @@ class: inverse, center, middle
 
 ## Normal-Normal model
 
-X is distributed as Normal 
+X is Normally distributed:
+
 $$
 X|\mu,\ \sigma_0^2 \sim \mathcal{N}(\mu, \sigma_0^2)
 $$
@@ -118,7 +122,7 @@ $$
 = (2\pi\sigma_0^2)^{-\frac{1}{2}}\mathrm{exp} \left[-\frac{1}{2\sigma_0^2}(X - \mu)^2\right]
 $$
 
-Where 
+where 
 
 $$
 -\infty &lt; \mu &lt; \infty, \sigma_0^2\ \mathrm{known}
@@ -128,7 +132,7 @@ $$
 ---
 ## Normal-Normal model
 
-`\(\mu\)` is given a Normal prior
+The prior for `\(\mu\)` is Normal:
 
 $$
 \mu|m,\ s^2 \sim \mathcal{N}(m, s^2)
@@ -165,13 +169,13 @@ $$
 
 ## Normal-Normal model
 
-Posterior mean is
+The posterior mean is:
 
 $$
 \hat{\mu} = \left. \left(\frac{m}{s^2} + \frac{n\bar{x}}{\sigma_0^2}\right) \middle/ \left(\frac{1}{s^2} + \frac{n}{\sigma_0^2}\right) \right.
 $$
 
-and variance of posterior for mean is:
+and the posterior variance is:
 
 $$
 \hat{\sigma}_\mu^2 = \left(\frac{1}{s^2} + \frac{n}{\sigma_0^2}\right)^{-1}
@@ -186,17 +190,18 @@ class: inverse, center, middle
 
 ## Switching to numerical approach
 
--   With increasing model complexity, we may find that the analytic approach (using mathematical formulas) becomes impractical.
-    -   You might want to use priors and likelihoods other than the Normal distribution.
-    -   You might want to use multivariate or multiparameter models.
+- As model complexity increases, analytic solutions (i.e., closed-form formulas) often become impractical.
+  - You may want to use priors or likelihoods other than the Normal distribution.
+  - You may want to work with multivariate or multi-parameter models.
+
 
 ---
 
 ## Switching to numerical approach
 
--   Therefore, we will switch to a numerical approach that relies on mathematical simulations. These simulations allow us to find the posterior distribution without needing to solve complex integrals.
+- Therefore, we turn to numerical methods based on simulation. These methods allow us to approximate the posterior distribution without solving complex integrals.
 
--   The most commonly used approach in Bayesian analysis is Markov chain Monte Carlo (MCMC). You will learn more about it in our next class.
+- The most commonly used approach in Bayesian analysis is Markov chain Monte Carlo (MCMC). You will learn more about it in the next class.
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
