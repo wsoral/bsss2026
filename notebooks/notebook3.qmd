@@ -49,8 +49,8 @@ Plot the prior to check whether it aligns with your prior knowledge about alcoho
 
 ```{r}
 # Set the values below
-prior_mean
-prior_sd
+prior_mean = 0.3
+prior_sd = 0.2
 
 p_grid = seq(prior_mean - 3 * prior_sd, prior_mean + 3 * prior_sd, length.out = 100)
 prior = dnorm(p_grid, mean = prior_mean, sd = prior_sd)
@@ -96,9 +96,9 @@ Using these formulas, compute the posterior mean, variance, and standard deviati
 
 ```{r}
 # Set correct formulas.
-posterior_mean
-posterior_var
-posterior_sd
+posterior_mean = (prior_mean/prior_sd^2 + n_cases*sample_mean/known_sd^2)/(1/prior_sd^2 + n_cases/known_sd^2)
+posterior_var = 1/(1/prior_sd^2 + n_cases/known_sd^2)
+posterior_sd = sqrt(posterior_var)
 ```
 
 Next, we visualize the results.
@@ -124,7 +124,7 @@ qnorm(median_ci95, posterior_mean, posterior_sd)
 We also compute the Savage–Dickey ratio to quantify the change in evidence after observing the data.
 
 ```{r}
-test_value
+test_value = 0 
 dnorm(test_value, posterior_mean, posterior_sd) / dnorm(test_value, prior_mean, prior_sd)
 ```
 
@@ -216,11 +216,11 @@ Start by specifying priors for the change in reaction time (RT) in the alcohol a
 
 ```{r}
 # You may want to change these values before moving on.
-prior_mean_alcohol
-prior_sd_alcohol
+prior_mean_alcohol = 0.3
+prior_sd_alcohol = 0.2
 
-prior_mean_placebo
-prior_sd_placebo
+prior_mean_placebo = -0.3
+prior_sd_placebo = 0.2
 
 prior_text_alcohol = paste0("normal(", prior_mean_alcohol, ", ", prior_sd_alcohol, ")")
 prior_text_placebo = paste0("normal(", prior_mean_placebo, ", ", prior_sd_placebo, ")")
