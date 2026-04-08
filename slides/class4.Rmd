@@ -136,6 +136,19 @@ sims %>%
 
 ---
 
+## How MCMC explores the posterior
+
+- Imagine a random walk across possible parameter values
+- We start at some initial point
+- At each step, we propose a small move to a nearby value
+- If the new value is more plausible, we are likely to move there
+- If it is less plausible, we might still move there—but less often
+- Over time, we spend more time in regions with higher probability
+- Early steps are unstable, so we discard them (warm-up / burn-in)
+- The remaining steps trace out the shape of the posterior distribution
+
+---
+
 ## Markov chain Monte Carlo
 
 ```{r}

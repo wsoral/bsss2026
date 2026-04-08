@@ -4,7 +4,7 @@
     <title>Bayesian Statistics in Social Sciences</title>
     <meta charset="utf-8" />
     <meta name="author" content="Wiktor Soral" />
-    <meta name="date" content="2026-03-26" />
+    <meta name="date" content="2026-04-08" />
     <script src="libs/header-attrs-2.30/header-attrs.js"></script>
     <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link href="libs/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
@@ -17,13 +17,13 @@ class: center, middle, inverse, title-slide
 # Bayesian Statistics in Social Sciences
 ]
 .subtitle[
-## Class 4 - analysis and Plotting of MCMC Draws
+## Class 5 - robust Bayesian analysis
 ]
 .author[
 ### Wiktor Soral
 ]
 .date[
-### 2026-03-26
+### 2026-04-08
 ]
 
 ---
@@ -33,172 +33,72 @@ class: center, middle, inverse, title-slide
 
 
 
-## Finding denominator of Bayes theorem
-
-- Obtaining the posterior distribution requires computing the denominator.
-- The result of the integration is a constant used to normalize the posterior distribution.
-
-$$
-P(\theta | \mathcal{D}) = \frac{P(\mathcal{D} | \theta)\times P(\mathcal{D} | \theta)}{\int{P(\mathcal{D} | \theta)\times P(\mathcal{D} | \theta)}d\theta}
-$$
+background-image: url("figures/decision_tree.png")
+background-position: 50% 50%
+background-size: 70% 80%
 
 ---
+class:inverse, middle, center
+# Robust comparison of means
 
-## Function
-
-&lt;img src="class4_files/figure-html/unnamed-chunk-2-1.png" alt="" width="65%" style="display: block; margin: auto;" /&gt;
-
----
-
-## Finding area under function
-
-&lt;img src="class4_files/figure-html/unnamed-chunk-3-1.png" alt="" width="65%" style="display: block; margin: auto;" /&gt;
-
----
-
-## Approximating area under function
-
-&lt;img src="class4_files/figure-html/unnamed-chunk-4-1.png" alt="" width="65%" style="display: block; margin: auto;" /&gt;
-
----
-
-## Approximating area under function
-
-&lt;img src="class4_files/figure-html/unnamed-chunk-5-1.png" alt="" width="65%" style="display: block; margin: auto;" /&gt;
-
----
-
-## Approximating area under function
-
-&lt;img src="class4_files/figure-html/unnamed-chunk-6-1.png" alt="" width="65%" style="display: block; margin: auto;" /&gt;
-
----
-
-## Approximating area under function
-
-Accepted values of x follow a Normal distribution.
-
-&lt;img src="class4_files/figure-html/unnamed-chunk-7-1.png" alt="" width="65%" style="display: block; margin: auto;" /&gt;
-
----
-
-## Markov chain Monte Carlo
-
-- MCMC refers to a class of algorithms based on a shared idea:
-  - Metropolis, Metropolis–Hastings, Gibbs
-  - Hamiltonian Monte Carlo, NUTS
-- The goal is to sample from a complex, high-dimensional probability distribution.
-- This is done by repeatedly generating candidate samples from a proposal distribution and accepting or rejecting them according to a specified acceptance probability.
-
----
-
-## How MCMC explores the posterior
-
-- Imagine a random walk across possible parameter values
-- We start at some initial point
-- At each step, we propose a small move to a nearby value
-- If the new value is more plausible, we are likely to move there
-- If it is less plausible, we might still move there—but less often
-- Over time, we spend more time in regions with higher probability
-- Early steps are unstable, so we discard them (warm-up / burn-in)
-- The remaining steps trace out the shape of the posterior distribution
-
----
-
-## Markov chain Monte Carlo
-
-&lt;img src="class4_files/figure-html/unnamed-chunk-8-1.png" alt="" width="65%" style="display: block; margin: auto;" /&gt;
-
----
-
-## Markov chain Monte Carlo
-
-&lt;img src="class4_files/figure-html/unnamed-chunk-9-1.png" alt="" width="65%" style="display: block; margin: auto;" /&gt;
-
----
-
-## Markov chain Monte Carlo
-
-&lt;img src="class4_files/figure-html/unnamed-chunk-10-1.png" alt="" width="65%" style="display: block; margin: auto;" /&gt;
-
----
-class: inverse, center, middle
-
-# Describing posterior distribution
-
----
-## Centrality - mean
-
-&lt;img src="class4_files/figure-html/unnamed-chunk-11-1.png" alt="" width="65%" style="display: block; margin: auto;" /&gt;
-
----
-
-## Centrality - MAP estimate
-
-&lt;img src="class4_files/figure-html/unnamed-chunk-12-1.png" alt="" width="65%" style="display: block; margin: auto;" /&gt;
-
----
-
-## Centrality - median
-
-&lt;img src="class4_files/figure-html/unnamed-chunk-13-1.png" alt="" width="65%" style="display: block; margin: auto;" /&gt;
-
----
-
-## Uncertainty - credible intervals
-
-&lt;img src="class4_files/figure-html/unnamed-chunk-14-1.png" alt="" width="65%" style="display: block; margin: auto;" /&gt;
-
----
-
-## Uncertainty - highest density intervals
-
-&lt;img src="class4_files/figure-html/unnamed-chunk-15-1.png" alt="" width="65%" style="display: block; margin: auto;" /&gt;
-
----
-
-## Uncertainty - highest density intervals (multimodal)
-
-&lt;img src="class4_files/figure-html/unnamed-chunk-16-1.png" alt="" width="65%" style="display: block; margin: auto;" /&gt;
-
----
-
-## Existence - `\(P_{D}\)`
-
-&lt;img src="class4_files/figure-html/unnamed-chunk-17-1.png" alt="" width="65%" style="display: block; margin: auto;" /&gt;
-
-- Probability of Direction: 0.93
-
----
-
-## Existence - `\(P_{D}\)`
-
-
-- pd \&lt;= 95%: uncertain
-- pd \&gt; 95%: possibly existing
-- pd \&gt; 97%: likely existing
-- pd \&gt; 99%: probably existing
-- pd \&gt; 99.9%: certainly existing
 
 
 ---
 
-## Significance - `\(ROPE\)`
+## Student t distribution
 
-&lt;img src="class4_files/figure-html/unnamed-chunk-18-1.png" alt="" width="65%" style="display: block; margin: auto;" /&gt;
-
--   Proportion of samples inside ROPE: 22.88%
+&lt;img src="class5_files/figure-html/unnamed-chunk-2-1.png" alt="" width="65%" style="display: block; margin: auto;" /&gt;
 
 ---
 
-## Significance - `\(ROPE\)`
+## BEST
+
+&lt;img src="class5_files/figure-html/unnamed-chunk-3-1.png" alt="" width="65%" style="display: block; margin: auto;" /&gt;
 
 
-- more than 99% in ROPE: negligible (we can accept the null hypothesis)
-- less than 97.5% in ROPE: probably negligible
-- \&lt;=97.5% &amp; \&gt;= 2.5% in ROPE: undecided significance
-- \&lt;2.5% in ROPE: probably significant
-- \&lt;1% in ROPE: significant (we can reject the null hypothesis)
+---
+class:inverse, center, middle
+# WAMBS checklist
+
+---
+
+## WAMBS checklist
+
+When to worry, and how to Avoid the Misuse of Bayesian Statistics
+
+Depaoli, S., Van de Schoot, R. (2017). Improving Transparency and Replication in Bayesian Statistics: The WAMBS-Checklist. Psychological Methods, 22(2), 240-261. http://dx.doi.org/10.1037/met0000065
+
+
+---
+
+## WAMBS checklist
+
+**To be checked before estimating the model**
+
+1.  Do you understand the priors?
+
+---
+
+## WAMBS checklist
+
+**To be checked after estimation but before inspecting model results**
+
+2.  Does the trace-plot exhibit convergence?
+3.  Does convergence remain after doubling the number of iterations?
+4.  Does the posterior distribution histogram have enough information?
+5.  Do the chains exhibit a strong degree of autocorrelation?
+6.  Do the posterior distributions make substantive sense?
+
+---
+
+## WAMBS checklist
+
+**Understanding the exact influence of the priors**
+
+7.  Do different specification of the multivariate variance priors influence the results?
+8.  Is there a notable effect of the prior when compared with non-informative priors?
+9.  Are the results stable from a sensitivity analysis?
+10. Is the Bayesian way of interpreting and reporting model results used?
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
