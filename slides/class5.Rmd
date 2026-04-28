@@ -1,6 +1,6 @@
 ---
 title: "Bayesian Statistics in Social Sciences"
-subtitle: "Class 5 - robust Bayesian analysis"
+subtitle: "Class 5 - Robust Bayesian Analysis"
 author: "Wiktor Soral"
 date: "`r Sys.Date()`"
 output:

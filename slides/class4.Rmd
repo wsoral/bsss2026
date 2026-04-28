@@ -1,6 +1,6 @@
 ---
 title: "Bayesian Statistics in Social Sciences"
-subtitle: "Class 4 - analysis and Plotting of MCMC Draws"
+subtitle: "Class 4 - Analysis and Plotting of MCMC Draws"
 author: "Wiktor Soral"
 date: "`r Sys.Date()`"
 output:

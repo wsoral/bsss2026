@@ -1,6 +1,6 @@
 ---
 title: "Bayesian Statistics in Social Sciences"
-subtitle: "Class 2 - simple models and priors"
+subtitle: "Class 2 - Simple Models and Priors"
 author: "Wiktor Soral"
 date: "`r Sys.Date()`"
 output:

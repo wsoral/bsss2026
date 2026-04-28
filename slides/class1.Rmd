@@ -226,13 +226,12 @@ class: inverse, center, middle
 
 ## Course Outline
 
-1. Introduction to Bayesian Statistics: Bayes' theorem (26-Feb-26)
-1. Introduction to Bayesian Statistics: Simple models and priors (12-Mar-26)
+1. Introduction to Bayesian Statistics (26-Feb-26)
 1. Using *brms* for Simple Models (19-Mar-26)
 1. Analysis and Plotting of MCMC Draws (26-Mar-26)
-1. Bayesian Linear Models: simple, multivariate, moderation, and mediation (09-Apr-26)
-1. Bayesian Linear Models: Generalized and multilevel (16-Apr-26)
-1. Model Comparison and Model Selection: Bayes factors and information criteria (30-Apr-26)
+1. Robust Bayesian Analysis (09-Apr-26)
+1. Bayesian Linear Models (16-Apr-26)
+1. Model Comparison and Averaging (30-Apr-26)
 1. Test (07-May-26)
 
 

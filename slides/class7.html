@@ -32,7 +32,7 @@ class: center, middle, inverse, title-slide
 
 
 
-## Model comparison - Bayes factor {.smaller}
+## Model comparison - Bayes factor 
 
 -   Bayes Factor (BF) indicates the relative strength of evidence in the data for two competing theories/models/hypotheses
     -   Example: Alternative hypothesis (`\(H_1\)`) vs. Null hypothesis (`\(H_0\)`)
@@ -44,7 +44,7 @@ class: center, middle, inverse, title-slide
 
 ---
 
-## Model comparison - Bayes factor {.smaller}
+## Model comparison - Bayes factor
 
 |       | BF  |       | Interpretation                 |
 |-------|-----|-------|--------------------------------|
@@ -73,12 +73,7 @@ class: center, middle, inverse, title-slide
 
 &lt;img src="class7_files/figure-html/unnamed-chunk-2-1.png" alt="" width="65%" style="display: block; margin: auto;" /&gt;
 
----
 
-## Information criteria
-
--   Information criteria account for model complexity, and provide a measure of out-of-sample predictive accuracy.
--   Leave-one-out information criterion (LOOIC) can efficiently approximate leave-one-out cross-validation
 
 
 ---
@@ -86,6 +81,79 @@ class: center, middle, inverse, title-slide
 ## Leave-one-out cross validation
 
 &lt;img src="class7_files/figure-html/unnamed-chunk-3-1.png" alt="" width="65%" style="display: block; margin: auto;" /&gt;
+
+---
+
+## ELPD and LOOIC
+
+`$$p(y_i | y_{-i})$$`
+--
+
+`$$elpd_i = log\ p(y_i | y_{-i})$$`
+--
+
+`$$elpd_{loo} = \sum_{i=1}^n  log\ p(y_i | y_{-i})$$`
+
+--
+
+`$$LOOIC = -2 * elpd_{loo}$$`
+
+---
+
+## PSIS-LOOIC
+
+`$$log\ p(y_i | y_{-i}) \approx log \left( \frac{\sum_s w_i^{(s)} p(y_i | \theta^{(s)})}{\sum_s w_i^{(s)}} \right)$$`
+where:
+
+`$$w^{(s)} = \frac{1}{p(y_i | \theta^{(s)})}$$`
+
+- Some weigths `\(w^{(s)}\)` may be very large and lead to noisy estimator.
+- PSIS-LOOIC uses Pareto distribution fitted to the tail of weights to smooth very large values.
+- It may not always work properly. See Pareto `\(\hat{k}\)` parameter
+  - `\(\hat{k}\)` &lt; 0.5 - great
+  - `\(\hat{k}\)` &lt; 0.7 - OK
+  - `\(\hat{k}\)` &gt; 0.7 - approximate LOO may not work properly
+  
+---
+
+## Effective Number of Parameters in PSIS-LOO (`\(p_{\text{loo}}\)`)
+
+**Definition**  
+- `\(p_{\text{loo}}\)` = effective number of parameters  
+- Measures how much the model adapts to the observed data  
+
+**Intuition**  
+- Quantifies **model flexibility / complexity in practice**  
+- Not equal to nominal parameter count  
+- Reflects **overfitting potential**  
+
+
+**Computation (conceptually)**  
+- Difference between:
+  - fit to observed data  
+  - fit under leave-one-out prediction  
+- `\(p_{\text{loo}} = \sum_i \big(\log p(y_i \mid y) - \log p(y_i \mid y_{-i})\big)\)` 
+
+---
+
+## Effective Number of Parameters in PSIS-LOO (`\(p_{\text{loo}}\)`)
+
+**Interpretation Guidelines**  
+- Small → strong regularization, stable model  
+- Moderate → good bias–variance trade-off  
+- Large → high flexibility, possible overfitting  
+
+Rule of thumb:  
+- Compare `\(p_{\text{loo}}\)` **relative to `\(n\)`** (`\(p_{\text{loo}}\)`/n in range [0.1 - 0.5]) and across models  
+
+**Use in Practice**  
+- Always interpret **together with `\(elpd_{loo}\)`**  
+- Helps assess:
+  - whether better predictive fit justifies added complexity  
+- Large `\(p_{\text{loo}}\)` + high Pareto `\(k\)` → **LOO may be unreliable**  
+
+**Key Takeaway**  
+`\(p_{\text{loo}}\)` = *how many parameters the model effectively uses to fit the data*  
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
