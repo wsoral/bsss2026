@@ -194,6 +194,7 @@ We create a tibble containing specific values of `zAge` corresponding to real ag
 new_data_vacc <- tibble(
   zAge = c(-1, 0, 1) ## corresponding to 29, 44, 60
 )
+new_data_vacc
 ```
 
 #### Extracting Posterior Predictive Distributions and Visualizing Results
